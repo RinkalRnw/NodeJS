@@ -5,6 +5,8 @@
 const a = require('http');
 
 const server = a.createServer( (req,res)=>{
+    res.writeHead(200,{'Content-Type':'text/plain'});
+    res.write("HEllo......");
     res.end("Connection established - 8000");
 });
 
