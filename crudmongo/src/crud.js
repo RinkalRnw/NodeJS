@@ -68,7 +68,7 @@ async function getdata() {
                 })
                 oldImageName = (udata.image!='')?udata.image:'';
                 
-                if(imgfilename != ''){
+                if(req.file && imgfilename != ''){
                     let imgname = "uploads/"+udata.image
                     fs.unlink(imgname,()=>{
                         console.log("Image deleted...")
@@ -82,7 +82,7 @@ async function getdata() {
                         age: req.body.age,
                         email: req.body.email,
                         address: req.body.address,
-                        image: (imgfilename != '')?imgfilename:oldImageName
+                        image: (req.file && imgfilename != '')?imgfilename:oldImageName
                     }
                 })
             } else {
