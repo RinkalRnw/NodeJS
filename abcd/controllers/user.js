@@ -12,6 +12,10 @@ const getUserForm = async(req,res) => {
 }
 
 const savePostData = async(req,res) => {
+    let checkUser = userModel.findOne({name:req.body.name});
+    if(checkUser){
+        return res.send("User already exists")
+    }
     let empdata = new userModel({
         id:2,
         name:req.body.name,
@@ -20,7 +24,7 @@ const savePostData = async(req,res) => {
     })
 
     result = await empdata.save(empdata);
-    console.log("Data inserted successfully"+result)
+    console.log("User registered successfully"+result)
 }
 
 module.exports = {

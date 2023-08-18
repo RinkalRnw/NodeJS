@@ -6,8 +6,16 @@ const mainData = async ()=>{
 mainData()
 const studentSchema = new mongoose.Schema({
     id:Number,
-    name:String,
-    email:String,
+    name:{
+        type:String,
+        required:true,
+        unique:true,
+    },
+    email:{
+        type:String,
+        required:true,
+        unique:true,
+    },
     password:String
 })
 

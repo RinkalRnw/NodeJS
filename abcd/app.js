@@ -5,10 +5,12 @@ const app = express();
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname))
 const adminRoutes = require('./routes/admin');
+const loginRoutes = require('./routes/login');
 app.use('/admin', adminRoutes);
+app.use('/login', loginRoutes)
 
 app.get('/', (req, res) => {
-    res.send("User side")
+    res.render("login")
 })
 
 app.listen(8004,"127.0.0.1",()=>{
