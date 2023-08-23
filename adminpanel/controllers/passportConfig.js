@@ -1,29 +1,27 @@
-const LocalStrategy = require('passport-local').Strategy
-const User = require('../models/userModel')
-const checkPassportLogin = async (passport)=>{
-    let user = await User.findOne({ name: username })
-    passport.use(new LocalStrategy((username, password, done) => {
-        // Replace this with your actual user lookup logic
-        
-         async (err, user) => {
-            if (err) return await done(err);
-            if (!user) return await done(null, false, { message: 'Incorrect username.' });
-            if (!user.validPassword(password)) return await done(null, false, { message: 'Incorrect password.' });
-            return done(null, user);
-        };
-    }));
+const user = require("../models/userModel");
+const LocalStrategy = require("passport-local").Strategy;
+const initializingPassport = (passport)=>{
+    passport.use(
+        new LocalStrategy(async (username, password, done) => {
+          let userdata = await user.findOne({ name: username });
+          try {
+            if (!userdata) return done(null, false);
+            if (userdata.password !== password) return done(null, false);
+            return done(null, userdata);
+          } catch (error) {
+            return done(error, false);
+          }
+        })
+      );
     
-    // Serialize and deserialize user
-    passport.serializeUser((user, done) => {
+      passport.serializeUser((user, done) => {
         done(null, user.id);
-    });
+      });
     
-    passport.deserializeUser((id, done) => {
-        User.findById(id, (err, user) => {
-            done(err, user);
-        });
-    });
-
+      passport.deserializeUser(async (id, done) => {
+        let data = await user.findById(id);
+        done(null, data);
+      });
 }
 
-module.exports = checkPassportLogin
+module.exports = initializingPassport;

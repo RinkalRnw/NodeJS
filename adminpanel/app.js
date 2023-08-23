@@ -6,13 +6,15 @@ const cookie = require('cookie-parser')
 const session = require('express-session')
 const flash = require('connect-flash');
 const passport = require('passport')
-const bodyParser = require('body-parser');
-const checkPassportLogin = require('./controllers/passportConfig')
-
-checkPassportLogin(passport)
-
+const initializingPassport = require('./controllers/passportConfig')
 
 app.use(cookie())
+app.use(session({ secret: "secret-key",resave:true,saveUninitialized:true }));
+
+initializingPassport(passport)
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({ secret: 'testSecret', resave: true, saveUninitialized: true }));
@@ -33,7 +35,8 @@ app.use(passport.session());
 app.set('view engine', 'ejs')
 app.use(express.static(__dirname))
 
-  
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(flash());
   
@@ -42,14 +45,6 @@ app.use(routes)
 app.get('/', (req, res) => {
     res.render('login',{ message: '' })
 })
-
-app.post('/login',
-  passport.authenticate('local', { failureRedirect: '/', failureMessage: true, successRedirect:"/admin/data" }),
-  function(req, res) {
-    res.redirect('/admin/data')
-    // res.redirect('/~' + req.user.name);
-  });
-  
 
 app.get('/logout', (req, res) => {
     res.clearCookie('UserName')
