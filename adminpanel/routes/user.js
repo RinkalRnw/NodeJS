@@ -13,13 +13,14 @@ router.post('/admin/savedata',bodyparser,getPostData)
 router.post(
     "/admin/login",
     passport.authenticate("local", {
-      successRedirect: "/admin/data",
       failureRedirect: "/",
+      // successRedirect:"/admin/data"
     }),
     async (req, res) => {
-      res.send("done");
+      res.send("Done!")
     }
   );
+  
 // router.post('/checkLogin',bodyparser,checkUserData)
 
 module.exports = router
