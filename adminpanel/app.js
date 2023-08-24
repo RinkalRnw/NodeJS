@@ -8,7 +8,7 @@ const flash = require('connect-flash');
 const passport = require('passport')
 const bodyparser = require('body-parser');
 const initializingPassport = require('./controllers/passportConfig')
-const MongoStore = require('connect-mongo')(session);
+// const MongoStore = require('connect-mongo')(session);
 
 app.use(cookie())
 app.use(session({ secret: "secret-key",resave:true,saveUninitialized:true }));
@@ -24,7 +24,7 @@ app.use(session({
     secret: 'testSecret',
     resave: false,
     saveUninitialized: false,
-    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    // store: new MongoStore({ mongooseConnection: mongoose.connection }),
   }));
 app.use(passport.initialize());
 app.use(passport.session());

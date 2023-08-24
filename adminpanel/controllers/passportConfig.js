@@ -3,8 +3,8 @@ const bcrypt = require("bcrypt");
 const LocalStrategy = require("passport-local").Strategy;
 const initializingPassport = async (passport)=>{
     passport.use(
-        new LocalStrategy(async (username, password, done) => {
-          let userdata = await user.findOne({ name: username });
+        new LocalStrategy(async (name, password, done) => {
+          let userdata = await user.findOne({ name: name });
           try {
             if (!userdata) return await done(null, false);
             const isPasswordValid = await bcrypt.compare(password, userdata.password);
