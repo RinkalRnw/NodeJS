@@ -1,6 +1,7 @@
 const { request } = require('express');
 const userModel = require('../models/userModel')
 const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer')
 const saltRounds = 10;
 let plainPassword = '';
 const checkUser = async(req,res) => {
@@ -17,6 +18,16 @@ const getForm = async (req,res)=>{
     // await checkUser(req,res)
     res.render('form',{username:req.cookies.UserName})
 }
+
+const transporter = nodemailer.createTransport({
+    port: 465,               // true for 465, false for other ports
+    host: "smtp.gmail.com",
+       auth: {
+            user: 'rwa2.rinkal.rk@gmail.com',
+            pass: 'qgxeodugpefaqjxq',
+         },
+    secure: true,
+    });
 const getPostData = async (req,res)=>{
    const {name,password,email } = req.body
     const checkUser = await userModel.findOne({email})
@@ -31,6 +42,14 @@ const getPostData = async (req,res)=>{
             email:email,
             password:crypted
         })
+        const mailInfo = {
+            from:"rwa2.rinkal.rk@gmail.com",
+            to:email,
+            subject:"Admin Panel",
+            text:"Registration",
+            html:"<p>You are successfully registered </p>"
+        }
+            await transporter.sendMail(mailInfo)
             const res1 = await result.save();
             console.log("Data saved"+res1)
             res.send("Data saved");
