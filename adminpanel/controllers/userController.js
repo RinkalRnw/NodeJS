@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer')
 const saltRounds = 10;
 let plainPassword = '';
+const cookieParser = require('cookie-parser')
 const checkUser = async(req,res) => {
     if(req.cookies && req.cookies.UserName != "admin"){
         return res.redirect('/')
@@ -93,17 +94,57 @@ const checkLoginData = async (req,res)=>{
         res.send("User not found")
     } else {
         const isPasswordValid = await bcrypt.compare(req.body.password, userdata.password);
-
+        req.cookie('userId',userdata.id)
         if (!isPasswordValid) {
           res.send("Invalid Password")
         }
     }
     res.redirect('/admin/data')
 }
+function generateOTP(){
+    var minm = 100000;
+    var maxm = 999999;
+    otp = Math.floor(Math.random() * (maxm - minm + 1)) + minm
+    return otp;
+
+}
+const getOTP = async (req,res)=>{
+    email=req.body.email
+    let userdata = await userModel.findOne({ email: req.body.email });
+    if(!userdata){
+        res.send("User not found")
+    } else {
+        otp = generateOTP();
+        console.log(otp)
+        const transporter = nodemailer.createTransport({
+            port: 465,               // true for 465, false for other ports
+            host: "smtp.gmail.com",
+               auth: {
+                    user: 'rwa2.rinkal.rk@gmail.com',
+                    pass: 'qgxeodugpefaqjxq',
+                 },
+            secure: true,
+            });
+            const mailInfo = {
+                from:"rwa2.rinkal.rk@gmail.com",
+                to:email,
+                subject:"Admin Panel",
+                text:"Forget Password",
+                html:`<p>Your OTP is ${otp} </p>`
+            }
+                await transporter.sendMail(mailInfo)
+        //Opt generate
+        //send mail
+        //db otp store
+    }
+    res.redirect('/admin/data')
+}
+
 module.exports = {
     getDashboard,
     getForm,
     getPostData,
     checkUserData,
-    checkLoginData
+    checkLoginData,
+    getOTP
 }
