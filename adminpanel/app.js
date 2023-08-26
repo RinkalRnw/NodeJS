@@ -10,6 +10,15 @@ const bodyparser = require('body-parser');
 const initializingPassport = require('./controllers/passportConfig')
 // const MongoStore = require('connect-mongo')(session);
 
+app.use(express.json())
+app.use(express.urlencoded({extended:true}))
+app.use(session({
+    secret:'flashblog',
+    saveUninitialized: false,
+    resave: false
+}));
+app.use(passport.initialize())
+app.use(passport.session())
 app.use(cookie())
 app.use(session({ secret: "secret-key",resave:true,saveUninitialized:true }));
 
