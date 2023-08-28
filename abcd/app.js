@@ -12,6 +12,9 @@ app.use('/login', loginRoutes)
 app.get('/', (req, res) => {
     res.render("login")
 })
+app.get('/register', (req, res) => {
+    res.render("register")
+})
 
 app.listen(8004,"127.0.0.1",()=>{
     console.log("Listening on port 8004");

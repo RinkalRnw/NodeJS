@@ -7,8 +7,9 @@ const bodyparser = body.urlencoded({extended:false})
 
 
 const router = express.Router();
-const {checkLogin} = require("../controllers/login")
+const {checkLogin,checkRegister} = require("../controllers/login")
 router.post('/checkLogin',bodyparser,checkLogin)
+router.post('/userregister',bodyparser,checkRegister)
 
 
 module.exports = router;

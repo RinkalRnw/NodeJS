@@ -4,7 +4,10 @@ const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer')
 const saltRounds = 10;
 let plainPassword = '';
+<<<<<<< Updated upstream
 const cookieParser = require('cookie-parser')
+=======
+>>>>>>> Stashed changes
 const checkUser = async(req,res) => {
     if(req.cookies && req.cookies.UserName != "admin"){
         return res.redirect('/')
@@ -94,13 +97,18 @@ const checkLoginData = async (req,res)=>{
         res.send("User not found")
     } else {
         const isPasswordValid = await bcrypt.compare(req.body.password, userdata.password);
+<<<<<<< Updated upstream
         req.cookie('userId',userdata.id)
+=======
+
+>>>>>>> Stashed changes
         if (!isPasswordValid) {
           res.send("Invalid Password")
         }
     }
     res.redirect('/admin/data')
 }
+<<<<<<< Updated upstream
 function generateOTP(){
     var minm = 100000;
     var maxm = 999999;
@@ -140,11 +148,17 @@ const getOTP = async (req,res)=>{
     res.redirect('/admin/data')
 }
 
+=======
+>>>>>>> Stashed changes
 module.exports = {
     getDashboard,
     getForm,
     getPostData,
     checkUserData,
+<<<<<<< Updated upstream
     checkLoginData,
     getOTP
+=======
+    checkLoginData
+>>>>>>> Stashed changes
 }
