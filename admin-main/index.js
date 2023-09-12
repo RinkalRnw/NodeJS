@@ -3,6 +3,8 @@ const app = express();
 const session = require('express-session');
 const flash = require('connect-flash');
 const cookie = require('cookie-parser');
+const dbConnect = require('./models/dbconfig')
+dbConnect();
 app.use(cookie());
 
 app.use(session({
