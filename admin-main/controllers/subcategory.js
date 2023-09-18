@@ -1,5 +1,5 @@
 const express = require('express');
-const submodel = require('../models/categoryModel');
+const submodel = require('../models/subCategoryModel');
 
 const app = express();
 // const bodyParser = require('body-parser');
@@ -18,40 +18,52 @@ const categoryData =async (req,res)=>{
 } 
 const savesubcat = async (req,res)=>{
     let getAllCat = await submodel.find();
-    let len = getAllCat.length+1;
+    // let len = getAllCat.length+1;
     const name = req.body.name;
-    const id = req.body.id;
-    const checkName = await model.findOne({catname:catname})
+    const id = req.body.cat_id;
+    const checkName = await submodel.findOne({name:name})
     
-    if(checkName){
-        
-            req.flash('success', 'Category already exists');
-            res.render('category',{
-                username: req.cookies.UserName,
-                getAllCat: getAllCat,
-                message2: req.flash('success'),
-                editcat:''
-            });
-    } else {
+    // if(checkName){  
+    //     res.status(300).send("Subcategory already exists")      
+            // req.flash('success', 'Subategory already exists');
+            // res.render('category',{
+            //     username: req.cookies.UserName,
+            //     getAllCat: getAllCat,
+            //     message2: req.flash('success'),
+            //     editcat:''
+            // });
+    //} else {
+
         const result = {
-            id: len,
-            catname: catname
+            cat_id: id,
+            name: name
         }
-        const savedata = new model(result);
+        console.log("isd is "+id);
+        console.log("name is "+name);
+        const savedata = new submodel(result);
         await savedata.save();
-        getAllCat = await model.find();
-        req.flash('success', 'Category added successfully');
-        res.render('category',{
-            username: req.cookies.UserName,
-            getAllCat: getAllCat,
-            message2: req.flash('success'),
-            editcat:''
-        }); 
-    }
+        
+        getAllCat = await submodel.find();
+        res.json(getAllCat);
+        // res.status(200).send("Subcategory saved successfully")
+        // req.flash('success', 'Category added successfully');
+        // res.render('category',{
+        //     username: req.cookies.UserName,
+        //     getAllCat: getAllCat,
+        //     message2: req.flash('success'),
+        //     editcat:''
+        // }); 
+   // }
     
 
 }
 
+const allSubCat = async(req,res) => {
+    submodel.find()
+    .populate("cat_id")
+    .then(p=>console.log(p))
+    .catch(error=>console.log(error));
+}
 
 
-module.exports = savesubcat;
+module.exports = {savesubcat,allSubCat};

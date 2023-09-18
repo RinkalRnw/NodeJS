@@ -10,7 +10,7 @@ const routes = express.Router();
 
 const {main,form,formdata,login,signup,checklogin,logout,forgetpass,otp,resetpass,savepass} = require('../controllers/user');
 const {categoryData,savecat,deleteCatData,editCatData,updatecat} = require('../controllers/category');
-const savesubcat = require('../controllers/subcategory');
+const {savesubcat,allSubCat} = require('../controllers/subcategory');
 
 routes.get('/admin',login);
 routes.get('/admin/home',main);
@@ -18,6 +18,8 @@ routes.get('/admin/form',formdata);
 routes.get('/admin/category',categoryData);
 routes.post('/admin/savecategory',body,savecat)
 routes.post('/admin/savesubcategory',body,savesubcat)
+
+routes.get('/admin/allSubCategory',allSubCat);
 
 routes.post('/admin/updatecategory/:id',body,updatecat)
 routes.get('/admin/deletecat/:id',deleteCatData);

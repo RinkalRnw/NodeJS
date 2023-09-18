@@ -19,12 +19,6 @@ const category = new mongoose.Schema({
     }
 }) 
 
-const subCategory = new mongoose.Schema({
-    name: String,
-    categories: [{ type: mongoose.Types.ObjectId, ref: 'category' }]
-  });
-
 const model = new mongoose.model('category',category);
-const submodel = new mongoose.model('subcategory',subCategory);
 
-module.exports = {model,submodel};
+module.exports = model;
