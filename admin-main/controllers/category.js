@@ -1,5 +1,5 @@
 const express = require('express');
-const {model,submodel} = require('../models/categoryModel');
+const model = require('../models/categoryModel');
 
 const app = express();
 // const bodyParser = require('body-parser');
