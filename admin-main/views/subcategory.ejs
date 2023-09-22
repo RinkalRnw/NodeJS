@@ -13,9 +13,20 @@
                     <div class="col-sm-12 col-xl-6">
                         <div class="bg-secondary rounded h-100 p-4">
                             <h6 class="mb-4">Category</h6>
-                            <form action="<%= (editSubCat)?'/admin/updatesubcategory/'+editSubCat._id:'/admin/savecategory'%>" method="post" name='frm'>
+                            <form action="<%= (editSubCat)?'/admin/updatesubcategory/'+editSubCat._id:'/admin/savesubcategory'%>" method="post" name='frm'>
                                 <div class="mb-3">
-                                    <label for="exampleInputEmail1" class="form-label">Category Name</label>
+                                    <label for="exampleInputEmail1" class="form-label">Categorye</label>
+                                    <select name="cat_id" class="form-control" >
+                                        <option value="">Select Category</option>
+                                        <% catData.forEach((i) => { 
+                                            var selected = ( editSubCat && i._id.toString() == editSubCat.cat_id.toString()) ? 'selected' : '';
+                                        %>
+                                            <option value="<%= i._id %>" <%= selected %>><%= i.catname %></option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="exampleInputEmail1" class="form-label">Subcategory Name</label>
                                     <input type="text" name="name" class="form-control" value="<%= (editSubCat)? editSubCat.name: '' %>">
                                 </div>
                                 <button type="submit" class="btn btn-primary">Save</button>
@@ -38,9 +49,9 @@
                                  
                                 <tbody>
                                     <% if(allSubCat) { %>
-                                        <% allSubCat.forEach((item,index)=>{ %>
+                                        <% allSubCat.forEach((item)=>{ %>
                                             <tr>
-                                                <td><%= index+1 %></td>
+                                                <td><%= item._id %></td>
                                                 <td><%= item.cat_id.catname %></td>
                                                 <td><%= item.name %></td>
                                                 <td><a href="/admin/editSubCat/<%= item._id%>">Edit</a> <a href="/admin/deleteSubCat/<%= item._id%>">Delete</a></td>

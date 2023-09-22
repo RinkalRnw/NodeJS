@@ -21,9 +21,9 @@ routes.post('/admin/savecategory',body,savecat)
 routes.post('/admin/savesubcategory',body,savesubcat)
 
 routes.get('/admin/allSubCategory',allSubCat);
-routes.delete('/admin/deleteSubCat/:id',deleteSubCat);
-routes.patch('/admin/editSubCat/:id',editSubCat);
-routes.post('/admin/updatesubcategory',body,updatesubcat)
+routes.get('/admin/deleteSubCat/:id',deleteSubCat);
+routes.get('/admin/editSubCat/:id',editSubCat);
+routes.post('/admin/updatesubcategory/:id',body,updatesubcat)
 
 
 routes.post('/admin/updatecategory/:id',body,updatecat)
