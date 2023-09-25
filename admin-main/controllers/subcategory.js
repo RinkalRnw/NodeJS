@@ -88,6 +88,28 @@ const allSubCat = async(req,res) => {
                     catData: catData
    });
 }
+const getCatData = async(req,res) => {
+    let cat_id = req.query.selectedValue;
+    let subData;
+    if(cat_id != '') {
+        subData =  await submodel.find({cat_id:cat_id}).populate("cat_id");
+    }
+    else {
+        subData =  await submodel.find().populate("cat_id");
+    }
+
+        res.json(subData);
+    
+//    console.log(subData);
+//    res.render('subcategory',{
+//                     username: req.cookies.UserName,
+//                     allSubCat: subData,
+//                     message2:'',
+//                     editSubCat:'',
+//                     catData: catData
+//    });
+}
+
 const editSubCat = async(req,res) => {
     const id = req.params.id;
     let catData = await model.find();
@@ -111,4 +133,4 @@ const deleteSubCat = async(req,res)=>{
     //select firstname,lastname from tbl;    
 }
 
-module.exports = {savesubcat,allSubCat,deleteSubCat,editSubCat,updatesubcat};
+module.exports = {savesubcat,allSubCat,deleteSubCat,editSubCat,updatesubcat,getCatData};

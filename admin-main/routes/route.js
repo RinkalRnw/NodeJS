@@ -10,7 +10,7 @@ const routes = express.Router();
 
 const {main,form,formdata,login,signup,checklogin,logout,forgetpass,otp,resetpass,savepass} = require('../controllers/user');
 const {categoryData,savecat,deleteCatData,editCatData,updatecat} = require('../controllers/category');
-const {savesubcat,allSubCat,deleteSubCat,editSubCat,updatesubcat} = require('../controllers/subcategory');
+const {savesubcat,allSubCat,deleteSubCat,editSubCat,updatesubcat,getCatData} = require('../controllers/subcategory');
 
 routes.get('/admin',login);
 
@@ -38,5 +38,13 @@ routes.post('/admin/checklogin',body,checklogin);
 routes.post('/admin/otp',body,otp);
 routes.post('/admin/reset',body,resetpass);
 routes.post('/admin/savepass',body,savepass);
+
+routes.get('/getData',getCatData);
+//  (req, res) => {
+    // const selectedValue = req.query.selectedValue;
+    // You can perform any data retrieval or processing here
+    // For demonstration purposes, we'll just send back the selected value
+    // res.json(`Data for ${selectedValue}`);
+//   });
 
 module.exports = routes;
