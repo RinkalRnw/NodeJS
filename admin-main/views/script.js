@@ -21,5 +21,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       
     });
+
+    const searchbox = document.getElementById("search");
+    searchbox.addEventListener('keyup', () => {
+      
+      const selectedValue = searchbox.value;
+      console.log(selectedValue);
+      // Send an AJAX request to the Express server
+      fetch(`/getfilterData?selectedValue=${selectedValue}`)
+        .then((response) => response.json())
+        .then((data) => {
+          let tr = '';
+          data.forEach((e)=>{
+            tr += `<tr><td>${e._id}</td><td>${e.cat_id.catname}</td><td>${e.name}</td><td><a href="/admin/editSubCat/${e._id}">Edit</a><a href="/admin/deleteSubCat/${e._id}">Delete</a></td></tr>`;
+          })
+          resultDiv.innerHTML = tr;
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+      
+    });
   });
   
