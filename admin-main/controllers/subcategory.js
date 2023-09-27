@@ -109,7 +109,27 @@ const getCatData = async(req,res) => {
 //                     catData: catData
 //    });
 }
+const getFilterData = async(req,res) => {
+    let searchtext = req.query.selectedValue;
+    console.log(searchtext);
+    let subData;
+    const categories = await model.find({
+        catname: { $regex: new RegExp(searchtext, "i") } // Case-insensitive search
+    });
+    
+      // Search for subcategories where cat_id points to a matching category
+      let subcategories = await submodel.find({
+        // Here Category Id is found in submodel 
+        cat_id: { $in: categories.map(category => category._id) }
+      }).populate("cat_id");
+      console.log(subcategories);
+    //   If we want to find subcategory than this condition works:
+    if(subcategories == ''){
+        subcategories = await submodel.find({ name:{ $regex: new RegExp(searchtext, "i")}}).populate("cat_id")
+    }
+    res.json(subcategories);
 
+}
 const editSubCat = async(req,res) => {
     const id = req.params.id;
     let catData = await model.find();
@@ -133,4 +153,4 @@ const deleteSubCat = async(req,res)=>{
     //select firstname,lastname from tbl;    
 }
 
-module.exports = {savesubcat,allSubCat,deleteSubCat,editSubCat,updatesubcat,getCatData};
+module.exports = {savesubcat,allSubCat,deleteSubCat,editSubCat,updatesubcat,getCatData,getFilterData};
