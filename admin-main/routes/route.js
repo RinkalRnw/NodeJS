@@ -10,7 +10,7 @@ const routes = express.Router();
 
 const {main,form,formdata,login,signup,checklogin,logout,forgetpass,otp,resetpass,savepass} = require('../controllers/user');
 const {categoryData,savecat,deleteCatData,editCatData,updatecat} = require('../controllers/category');
-const {savesubcat,allSubCat,deleteSubCat,editSubCat,updatesubcat,getCatData} = require('../controllers/subcategory');
+const {savesubcat,allSubCat,deleteSubCat,editSubCat,updatesubcat,getCatData,getFilterData} = require('../controllers/subcategory');
 
 routes.get('/admin',login);
 
@@ -40,6 +40,7 @@ routes.post('/admin/reset',body,resetpass);
 routes.post('/admin/savepass',body,savepass);
 
 routes.get('/getData',getCatData);
+routes.get('/getfilterData',getFilterData);
 //  (req, res) => {
     // const selectedValue = req.query.selectedValue;
     // You can perform any data retrieval or processing here
