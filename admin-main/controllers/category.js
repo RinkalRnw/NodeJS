@@ -1,5 +1,6 @@
 const express = require('express');
 const model = require('../models/categoryModel');
+const submodel = require('../models/subCategoryModel');
 
 const app = express();
 // const bodyParser = require('body-parser');
@@ -22,8 +23,7 @@ const savecat = async (req,res)=>{
     const catname = req.body.catname;
     const checkName = await model.findOne({catname:catname})
     
-    if(checkName){
-        
+    if(checkName){       
             req.flash('success', 'Category already exists');
             res.render('category',{
                 username: req.cookies.UserName,
@@ -53,9 +53,15 @@ const savecat = async (req,res)=>{
 
 const deleteCatData = async (req,res)=>{
     const id = req.params.id;
-    const data = await model.findByIdAndRemove({_id: id});
-    if(data){
-        res.redirect('/admin/category')
+    const subcat = await submodel.find({cat_id:id});
+    console.log(subcat);
+    if(subcat.length > 0) {
+        res.send("Category has subcategory so first delete it");
+    } else {
+        const data = await model.findByIdAndRemove({_id: id});
+        if(data){
+            res.redirect('/admin/category')
+        }
     }
 
 }

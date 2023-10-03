@@ -24,7 +24,8 @@ const user = new mongoose.Schema({
     },
     email: String,
     password: String,
-    otp:Number
+    otp:Number,
+    token: String
 
 }) 
 

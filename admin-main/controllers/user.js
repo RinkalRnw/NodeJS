@@ -6,6 +6,9 @@ const bcrypt = require('bcrypt');
 const mongoose = require('mongoose')
 const saltRounds = 10;
 
+var jwt = require('jsonwebtoken');
+const localStorage = require('localStorage');
+const secretKey = 'zoy123';
 
 // const accountSid = 'SKaa1cfe2abf0641dfb98da54700c38eae';
 // const authToken = 'Gvxu9K5YdAQVWqJcju8ihi06TyD8cci0';
@@ -340,6 +343,8 @@ const checklogin = async (req, res) => {
                 res.render('login', { message: req.flash('danger') });
             } else {
                 res.cookie("UserName", data.name);
+                localStorage.setItem('userToken', JSON.stringify(data.token));
+
                 res.render('index', { message: '', username: data.name });
             }
 
@@ -363,11 +368,8 @@ const form = async (req, res) => {
     if (email && password && name && number) {
 
         if (checkuser) {
-
             req.flash('info', 'Email is already registered!');
             res.render('signup', { message2: req.flash('info') });
-
-
         } else {
 
             const crypted = await bcrypt.hash(password, saltRounds);
@@ -377,7 +379,8 @@ const form = async (req, res) => {
                 name: name,
                 number: number,
                 email: email,
-                password: crypted
+                password: crypted,
+                token:''
 
             })
 
@@ -394,6 +397,10 @@ const form = async (req, res) => {
             await transporter.sendMail(mailInfo)
 
             await data.save();
+            //JWT token generate
+            var token = jwt.sign({data:data},secretKey);
+            let _id = data._id;
+            const result = await model.findByIdAndUpdate({_id},{$set:{token:token}})
             res.redirect('/admin');
 
         }
@@ -408,7 +415,5 @@ const form = async (req, res) => {
 }
 
 module.exports = {
-
     main, form, formdata, login, signup, checklogin, logout, forgetpass, otp, resetpass, savepass
-
 }

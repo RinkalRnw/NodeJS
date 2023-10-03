@@ -10,17 +10,19 @@ const routes = express.Router();
 
 const {main,form,formdata,login,signup,checklogin,logout,forgetpass,otp,resetpass,savepass} = require('../controllers/user');
 const {categoryData,savecat,deleteCatData,editCatData,updatecat} = require('../controllers/category');
-const {savesubcat,allSubCat,deleteSubCat,editSubCat,updatesubcat,getCatData} = require('../controllers/subcategory');
+const {savesubcat,allSubCat,deleteSubCat,editSubCat,updatesubcat,getCatData,getFilterData} = require('../controllers/subcategory');
+
+const verifyToken = require('../models/jwtconfig');
 
 routes.get('/admin',login);
 
-routes.get('/admin/home',main);
+routes.get('/admin/home',verifyToken,main);
 routes.get('/admin/form',formdata);
-routes.get('/admin/category',categoryData);
+routes.get('/admin/category',verifyToken,categoryData);
 routes.post('/admin/savecategory',body,savecat)
 routes.post('/admin/savesubcategory',body,savesubcat)
 
-routes.get('/admin/allSubCategory',allSubCat);
+routes.get('/admin/allSubCategory',verifyToken,allSubCat);
 routes.get('/admin/deleteSubCat/:id',deleteSubCat);
 routes.get('/admin/editSubCat/:id',editSubCat);
 routes.post('/admin/updatesubcategory/:id',body,updatesubcat)
@@ -40,6 +42,7 @@ routes.post('/admin/reset',body,resetpass);
 routes.post('/admin/savepass',body,savepass);
 
 routes.get('/getData',getCatData);
+routes.get('/getfilterData',getFilterData);
 //  (req, res) => {
     // const selectedValue = req.query.selectedValue;
     // You can perform any data retrieval or processing here

@@ -15,7 +15,7 @@
                             <h6 class="mb-4">Category</h6>
                             <form action="<%= (editSubCat)?'/admin/updatesubcategory/'+editSubCat._id:'/admin/savesubcategory'%>" method="post" name='frm'>
                                 <div class="mb-3">
-                                    <label for="exampleInputEmail1" class="form-label">Categorye</label>
+                                    <label for="exampleInputEmail1" class="form-label">Category</label>
                                     <select name="cat_id" class="form-control" >
                                         <option value="">Select Category</option>
                                         <% catData.forEach((i) => { 
@@ -37,14 +37,21 @@
                     <div class="col-sm-12 col-xl-6">
                         <div class="bg-secondary rounded h-100 p-4">
                             <h6 class="mb-4">All Categories</h6>
-                            <div class="mb-4">
-                                <select id="dispcat_id" name="dispcat_id">
+                            <div class="row">
+                            <div class="col-6">
+                                <select id="dispcat_id" name="dispcat_id" class="form-control">
                                 <option value="">Select Category</option>
                                 <% catData.forEach((i) => { %>
                                     <option value="<%= i._id %>"><%= i.catname %></option>
                                 <% }) %>
-                            </select></div>
-                        
+                            </select>
+                            </div>
+                            <div class="col-6">
+                                <form class="d-none d-md-flex ms-4">
+                                    <input class="form-control bg-dark border-0" id="search" name="search" type="search" placeholder="Search">
+                                </form>    
+                            </div>
+                        </div>
                             <table class="table">
                                 <thead>
                                     <tr>
