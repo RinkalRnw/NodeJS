@@ -12,8 +12,6 @@ const {main,form,formdata,login,signup,checklogin,logout,forgetpass,otp,resetpas
 const {categoryData,savecat,deleteCatData,editCatData,updatecat} = require('../controllers/category');
 const {savesubcat,allSubCat,deleteSubCat,editSubCat,updatesubcat,getCatData,getFilterData} = require('../controllers/subcategory');
 
-const verifyToken = require('../models/jwtconfig');
-
 routes.get('/admin',login);
 
 routes.get('/admin/home',verifyToken,main);
