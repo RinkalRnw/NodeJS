@@ -37,9 +37,32 @@ document.addEventListener('DOMContentLoaded', () => {
           resultDiv.innerHTML = tr;
         })
         .catch((error) => {
+            console.error('Error:', error);
+        });
+      
+    });   
+  });
+
+
+  const catdropdown = document.getElementById('cat_id');
+
+    catdropdown.addEventListener('change', () => {
+      
+      const selectedValue = catdropdown.value;
+      const subDiv = document.getElementById("sub_id");
+      // Send an AJAX request to the Express server
+      fetch(`/getSubData?selectedValue=${selectedValue}`)
+        .then((response) => response.json())
+        .then((data) => {
+          let tr = '<option>--Select SubCategory--</option>';
+          data.forEach((e)=>{
+            tr += `<option value="${e._id}">${e.name}</option>`;
+          })
+          subDiv.innerHTML = tr;
+        })
+        .catch((error) => {
           console.error('Error:', error);
         });
       
     });
-  });
   
