@@ -18,17 +18,27 @@ const {categoryData,savecat,deleteCatData,editCatData,updatecat} = require('../c
 const {savesubcat,allSubCat,deleteSubCat,editSubCat,updatesubcat,getCatData,getFilterData} = require('../controllers/subcategory');
 
 const {products,getSubData,saveproduct} = require('../controllers/products')
+const {roleData,saverole,deleteRoleData,editRoleData,updaterole} = require('../controllers/role');
+
+/* Role Routes */
+routes.get('/role',roleData);
+routes.post('/saverole',body,saverole)
+routes.get('/deleteRole/:id',deleteRoleData);
+routes.get('/editRole/:id',editRoleData);
+routes.post('/updateRole/:id',body,updaterole)
+
+
 routes.get('/admin',login);
 
-routes.get('/admin/home',verifyToken,main);
+routes.get('/admin/home',main);
 routes.get('/admin/form',formdata);
-routes.get('/admin/category',verifyToken,categoryData);
+routes.get('/admin/category',categoryData);
 routes.post('/admin/savecategory',body,savecat)
 routes.post('/admin/savesubcategory',body,savesubcat)
 routes.post('/admin/saveproduct',body,saveproduct)
 
-routes.get('/admin/allSubCategory',verifyToken,allSubCat);
-routes.get('/admin/products',verifyToken,products);
+routes.get('/admin/allSubCategory',allSubCat);
+routes.get('/admin/products',products);
 routes.get('/admin/deleteSubCat/:id',deleteSubCat);
 routes.get('/admin/editSubCat/:id',editSubCat);
 routes.post('/admin/updatesubcategory/:id',body,updatesubcat)

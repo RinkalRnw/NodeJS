@@ -1,0 +1,61 @@
+
+
+<%- include ('./partials/header')%>
+<%- include ('./partials/sidebar',{username:username})%>
+<%- include ('./partials/navbar',{username:username})%>
+
+            <!-- Form Start -->
+            <div class="container-fluid pt-4 px-4">
+                <% if(message2){ %>
+                    <p class="w-100 rounded p-2 mb-3 btn-primary text-white" role="alert">
+                        <%= message2 %>
+                    </p>
+                <% } %>
+                <div class="row g-4">
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4">Role</h6>
+                            <form action="<%= (editrole)?'/updateRole/'+editrole._id:'/saverole'%>" method="post" name='frm'>
+                                <div class="mb-3">
+                                    <label for="exampleInputEmail1" class="form-label">Role Name</label>
+                                    <input type="text" name="rolename" class="form-control" value="<%= (editrole)? editrole.rolename: '' %>">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </form>
+                        </div>
+                    </div>
+                   
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4">All Roles</h6>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Role Name</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                 
+                                <tbody>
+                                    <% if(getAllRole) { %>
+                                        <% getAllRole.forEach((item)=>{ %>
+                                            <tr>
+                                                <td><%= item._id %></td>
+                                                <td><%= item.rolename %></td>
+                                                <td><a href="/editRole/<%= item._id%>">Edit</a> <a href="/deleteRole/<%= item._id%>">Delete</a></td>
+                                            </tr>
+                                        <% }) %>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Form End -->
+
+
+<%- include ('./partials/footer')%>
+
+         

@@ -59,12 +59,26 @@
                                         <th scope="col">Category</th>
                                         <th scope="col">Subcategory</th>
                                         <th scope="col">Product</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Image</th>
                                         <th scope="col">Action</th>
                                     </tr>
                                 </thead>
                                  
-                                <tbody id="result">
-                                   
+                                <tbody id="prodresult">
+                                    <% if(allproducts) { %>
+                                        <% allproducts.forEach((item)=>{ %>
+                                            <tr>
+                                                <td><%= item._id %></td>
+                                                <td><%= item.cat_id.catname %></td>
+                                                <td><%= item.subcat_id.name %></td>
+                                                <td><%= item.name %></td>
+                                                <td><%= item.price %></td>
+                                                <td><img src="../images/<%= item.image %>" height="100px" width="100px"></td>
+                                                <td><a href="/admin/editproduct/<%= item._id%>">Edit</a> <a href="/admin/deleteproduct/<%= item._id%>">Delete</a></td>
+                                            </tr>
+                                        <% }) %>
+                                    <% } %>
                                 </tbody>
                             </table>
                         </div>

@@ -11,11 +11,13 @@ app.use(bodyParser.json());
 
 const products = async (req,res)=>{
     categoryData = await model.find();
+    productData = await prodmodel.find().populate('cat_id').populate('subcat_id');
+    console.log(productData);
     res.render('products',{
         catData: categoryData,
         username: req.cookies.UserName,
         message2:'',
-        allproducts:''
+        allproducts:productData
 
     });
 }
@@ -41,15 +43,14 @@ const saveproduct = async (req, res,next)=>{
         }
         // to convert base64 format into random filename
         const base64Data = imgdata.replace(/^data:([A-Za-z-+/]+);base64,/, '');        
-        fs.writeFileSync(path, base64Data,  {encoding: 'base64'});
+        // fs.writeFileSync(path, base64Data,  {encoding: 'base64'});
         const result = {
             cat_id:req.body.cat_id,
-            sub_id:req.body.sub_id,
+            subcat_id:req.body.sub_id,
             price:req.body.price,
             name:req.body.name,
             images:[base64Data]
         }
-
         const savedata = new prodmodel(result);
         await savedata.save();
         
