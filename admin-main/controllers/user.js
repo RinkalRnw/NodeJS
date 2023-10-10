@@ -331,7 +331,7 @@ const otp = async (req, res) => {
 
 const checklogin = async (req, res) => {
 
-    let data = await model.findOne({ email: req.body.email });
+    let data = await model.findOne({ email: req.body.email }).populate('role_id');
 
     if (req.body.email != '' && req.body.password != '') {
 
@@ -344,8 +344,12 @@ const checklogin = async (req, res) => {
                 res.render('login', { message: req.flash('danger') });
             } else {
                 res.cookie("UserName", data.name);
+                let rolename = data.role_id.rolename;
+                console.log(rolename)
                 localStorage.setItem('userToken', JSON.stringify(data.token));
-
+               let dt =  localStorage.setItem('userRole', JSON.stringify(rolename));
+                console.log(dt)
+                
                 res.render('index', { message: '', username: data.name });
             }
 
@@ -366,28 +370,28 @@ const form = async (req, res) => {
 
 
     const checkuser = await model.findOne({ email });
-    const checkuserrole = await model.findOne({ role_id });
-    
-
+    const checkuserrole = await model.findOne({ role_id }).populate('role_id');
+    let roleData = await rolemodel.find({isActive:1});
     if (email && password && name && number) {
 
         if(checkuserrole){
             if(checkuserrole.role_id.rolename == 'Admin'){
                 req.flash('info', 'Admin is already registered!');
-                res.render('signup', { message2: req.flash('info') });
+                res.render('signup', { message2: req.flash('info'),roleData:roleData });
             } else if(checkuserrole.role_id.rolename == 'Manager'){
                 const checkmanager = await model.find({ role_id });
                 if(checkmanager.length ==2 ){
-                    req.flash('info', 'Two Managers are already registered!');
-                    res.render('signup', { message2: req.flash('info') });
+                    req.flash('info', 'Two Managers already registered!');
+                    res.render('signup', { message2: req.flash('info'),roleData:roleData });
                 }
 
             }
+            else if (checkuser) {
+                req.flash('info', 'Email is already registered!');
+                res.render('signup', { message2: req.flash('info'),roleData:roleData });
+            } 
         }
-        else if (checkuser) {
-            req.flash('info', 'Email is already registered!');
-            res.render('signup', { message2: req.flash('info') });
-        } 
+        
         else {
             const crypted = await bcrypt.hash(password, saltRounds);
             let data = new model({
@@ -410,7 +414,7 @@ const form = async (req, res) => {
 
             }
 
-            await transporter.sendMail(mailInfo)
+            // await transporter.sendMail(mailInfo)
 
             await data.save();
             //JWT token generate
@@ -424,7 +428,7 @@ const form = async (req, res) => {
     } else {
 
         req.flash('info', 'Please Enter All the Fields!');
-        res.render('signup', { message2: req.flash('info') });
+        res.render('signup', { message2: req.flash('info'),roleData:roleData });
 
     }
 

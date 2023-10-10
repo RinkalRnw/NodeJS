@@ -11,6 +11,7 @@ const body = bodyParser.urlencoded({ extended: true })
 // app.use(bodyParser.json());
 
 const routes = express.Router();
+const localStorage = require('node-localstorage');
 
 const verifyToken = require('../models/jwtconfig');
 const {main,form,formdata,login,signup,checklogin,logout,forgetpass,otp,resetpass,savepass} = require('../controllers/user');
@@ -21,18 +22,27 @@ const {products,getSubData,saveproduct} = require('../controllers/products')
 const {roleData,saverole,deleteRoleData,editRoleData,updaterole} = require('../controllers/role');
 
 /* Role Routes */
-routes.get('/role',roleData);
-routes.post('/saverole',body,saverole)
-routes.get('/deleteRole/:id',deleteRoleData);
-routes.get('/editRole/:id',editRoleData);
-routes.post('/updateRole/:id',body,updaterole)
+let role = "Admin";
+console.log(role)
+if(role == 'Admin'){
+    routes.get('/role',roleData);
+    routes.post('/saverole',body,saverole)
+    routes.get('/deleteRole/:id',deleteRoleData);
+    routes.get('/editRole/:id',editRoleData);
+    routes.post('/updateRole/:id',body,updaterole)
+    
+} else {
+    routes.get('/pagenotfound',(req,res)=>{
+        res.render('pagenotfound')
+    })
+}
 
 
 routes.get('/admin',login);
 
 routes.get('/admin/home',main);
 routes.get('/admin/form',formdata);
-routes.get('/admin/category',categoryData);
+routes.get('/admin/category',verifyToken,categoryData);
 routes.post('/admin/savecategory',body,savecat)
 routes.post('/admin/savesubcategory',body,savesubcat)
 routes.post('/admin/saveproduct',body,saveproduct)
