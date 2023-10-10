@@ -25,7 +25,8 @@ const user = new mongoose.Schema({
     email: String,
     password: String,
     otp:Number,
-    token: String
+    token: String,
+    role_id:{ type: mongoose.Schema.Types.ObjectId, ref: 'role' }
 
 }) 
 

@@ -45,8 +45,6 @@ const saverole = async (req,res)=>{
             editrole:''
         }); 
     }
-    
-
 }
 
 const deleteRoleData = async (req,res)=>{
@@ -55,7 +53,6 @@ const deleteRoleData = async (req,res)=>{
         if(data){
             res.redirect('/role')
         }
-
 }
 
 const editRoleData = async (req,res)=>{

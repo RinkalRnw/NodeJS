@@ -9,6 +9,7 @@ const saltRounds = 10;
 var jwt = require('jsonwebtoken');
 const localStorage = require('localStorage');
 const secretKey = 'zoy123';
+const rolemodel = require('../models/roleModel')
 
 // const accountSid = 'SKaa1cfe2abf0641dfb98da54700c38eae';
 // const authToken = 'Gvxu9K5YdAQVWqJcju8ihi06TyD8cci0';
@@ -95,9 +96,9 @@ const logout = (req, res) => {
 
 }
 
-const signup = (req, res) => {
-
-    res.render('signup', { message2: '' });
+const signup = async(req, res) => {
+    let roleData = await rolemodel.find({isActive:1});
+    res.render('signup', { message2: '',roleData: roleData});
 
 }
 
@@ -361,27 +362,42 @@ const checklogin = async (req, res) => {
 
 const form = async (req, res) => {
 
-    const { name, password, email, number } = req.body;
+    const { name, password, email, number, role_id } = req.body;
+
 
     const checkuser = await model.findOne({ email });
+    const checkuserrole = await model.findOne({ role_id });
+    
 
     if (email && password && name && number) {
 
-        if (checkuser) {
+        if(checkuserrole){
+            if(checkuserrole.role_id.rolename == 'Admin'){
+                req.flash('info', 'Admin is already registered!');
+                res.render('signup', { message2: req.flash('info') });
+            } else if(checkuserrole.role_id.rolename == 'Manager'){
+                const checkmanager = await model.find({ role_id });
+                if(checkmanager.length ==2 ){
+                    req.flash('info', 'Two Managers are already registered!');
+                    res.render('signup', { message2: req.flash('info') });
+                }
+
+            }
+        }
+        else if (checkuser) {
             req.flash('info', 'Email is already registered!');
             res.render('signup', { message2: req.flash('info') });
-        } else {
-
+        } 
+        else {
             const crypted = await bcrypt.hash(password, saltRounds);
             let data = new model({
-
                 id: 1,
                 name: name,
                 number: number,
                 email: email,
                 password: crypted,
-                token:''
-
+                token:'',
+                role_id: role_id
             })
 
             const mailInfo = {
