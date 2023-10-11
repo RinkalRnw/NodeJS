@@ -11,7 +11,8 @@ const body = bodyParser.urlencoded({ extended: true })
 // app.use(bodyParser.json());
 
 const routes = express.Router();
-const localStorage = require('node-localstorage');
+var LocalStorage = require('node-localstorage').LocalStorage,
+localStorage = new LocalStorage('./scratch');
 
 const verifyToken = require('../models/jwtconfig');
 const {main,form,formdata,login,signup,checklogin,logout,forgetpass,otp,resetpass,savepass} = require('../controllers/user');
@@ -22,9 +23,9 @@ const {products,getSubData,saveproduct} = require('../controllers/products')
 const {roleData,saverole,deleteRoleData,editRoleData,updaterole} = require('../controllers/role');
 
 /* Role Routes */
-let role = "Admin";
-console.log(role)
-if(role == 'Admin'){
+let role = JSON.parse(localStorage.getItem('userRole'));
+console.log("Current Role is "+role)
+if(role === "Admin"){
     routes.get('/role',roleData);
     routes.post('/saverole',body,saverole)
     routes.get('/deleteRole/:id',deleteRoleData);

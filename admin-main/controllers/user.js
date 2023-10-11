@@ -7,7 +7,9 @@ const mongoose = require('mongoose')
 const saltRounds = 10;
 
 var jwt = require('jsonwebtoken');
-const localStorage = require('localStorage');
+var LocalStorage = require('node-localstorage').LocalStorage,
+localStorage = new LocalStorage('./scratch');
+// const localStorage = require('localStorage');
 const secretKey = 'zoy123';
 const rolemodel = require('../models/roleModel')
 
@@ -90,7 +92,7 @@ const forgetpass = (req, res) => {
 }
 
 const logout = (req, res) => {
-
+    localStorage.clear();
     res.clearCookie('UserName');
     res.redirect('/admin');
 
@@ -345,10 +347,9 @@ const checklogin = async (req, res) => {
             } else {
                 res.cookie("UserName", data.name);
                 let rolename = data.role_id.rolename;
-                console.log(rolename)
                 localStorage.setItem('userToken', JSON.stringify(data.token));
-               let dt =  localStorage.setItem('userRole', JSON.stringify(rolename));
-                console.log(dt)
+               localStorage.setItem('userRole', JSON.stringify(rolename));
+                
                 
                 res.render('index', { message: '', username: data.name });
             }
@@ -383,6 +384,36 @@ const form = async (req, res) => {
                 if(checkmanager.length ==2 ){
                     req.flash('info', 'Two Managers already registered!');
                     res.render('signup', { message2: req.flash('info'),roleData:roleData });
+                } else {
+                    const crypted = await bcrypt.hash(password, saltRounds);
+                    let data = new model({
+                        id: 1,
+                        name: name,
+                        number: number,
+                        email: email,
+                        password: crypted,
+                        token:'',
+                        role_id: role_id
+                    })
+
+                    const mailInfo = {
+
+                        from: "vishalchavda7781@gmail.com",
+                        to: email,
+                        subject: "Vishal Chavda Admin Panel",
+                        text: "Registration",
+                        html: "<p>You are successfully registered </p>"
+
+                    }
+
+                    // await transporter.sendMail(mailInfo)
+
+                    await data.save();
+                    //JWT token generate
+                    var token = jwt.sign({data:data},secretKey);
+                    let _id = data._id;
+                    const result = await model.findByIdAndUpdate({_id},{$set:{token:token}})
+                    res.redirect('/admin');
                 }
 
             }
