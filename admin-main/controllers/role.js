@@ -5,6 +5,8 @@ const rolemodel = require('../models/roleModel');
 const app = express();
 // const bodyParser = require('body-parser');
 app.use(express.json());
+var LocalStorage = require('node-localstorage').LocalStorage,
+localStorage = new LocalStorage('./scratch');
 let editrole=  '';
 const roleData =async (req,res)=>{
     const getAllRole = await rolemodel.find();
@@ -93,4 +95,12 @@ const updaterole = async (req,res)=>{
 
 }
 
-module.exports = {roleData,saverole,deleteRoleData,editRoleData,updaterole};
+const checkRole = async (req, res,next)=>{
+    let role = JSON.parse(localStorage.getItem('userRole'));
+    if(role=="Admin"){
+        next();
+    } else {
+        res.render('pagenotfound')
+    }
+}
+module.exports = {roleData,saverole,deleteRoleData,editRoleData,checkRole,updaterole};

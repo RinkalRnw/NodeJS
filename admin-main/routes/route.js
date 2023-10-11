@@ -20,23 +20,23 @@ const {categoryData,savecat,deleteCatData,editCatData,updatecat} = require('../c
 const {savesubcat,allSubCat,deleteSubCat,editSubCat,updatesubcat,getCatData,getFilterData} = require('../controllers/subcategory');
 
 const {products,getSubData,saveproduct} = require('../controllers/products')
-const {roleData,saverole,deleteRoleData,editRoleData,updaterole} = require('../controllers/role');
+const {roleData,saverole,checkRole,deleteRoleData,editRoleData,updaterole} = require('../controllers/role');
 
 /* Role Routes */
-let role = JSON.parse(localStorage.getItem('userRole'));
-console.log("Current Role is "+role)
-if(role === "Admin"){
-    routes.get('/role',roleData);
+// let role = JSON.parse(localStorage.getItem('userRole'));
+// console.log("Current Role is "+role)
+// if(role == "Admin"){
+    routes.get('/role',checkRole,roleData);
     routes.post('/saverole',body,saverole)
-    routes.get('/deleteRole/:id',deleteRoleData);
-    routes.get('/editRole/:id',editRoleData);
+    routes.get('/deleteRole/:id',checkRole,deleteRoleData);
+    routes.get('/editRole/:id',checkRole,editRoleData);
     routes.post('/updateRole/:id',body,updaterole)
     
-} else {
-    routes.get('/pagenotfound',(req,res)=>{
-        res.render('pagenotfound')
-    })
-}
+// } else {
+//     routes.get('/pagenotfound',(req,res)=>{
+//         res.render('pagenotfound')
+//     })
+// }
 
 
 routes.get('/admin',login);
