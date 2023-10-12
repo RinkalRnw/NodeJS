@@ -12,8 +12,7 @@ const role = new mongoose.Schema({
         unique: true
     },
     isActive:{
-        type: Boolean
-        
+        type: Boolean        
     }
 }) 
 

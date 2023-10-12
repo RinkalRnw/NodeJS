@@ -6,6 +6,8 @@ const bcrypt = require('bcrypt');
 const mongoose = require('mongoose')
 const saltRounds = 10;
 
+var GoogleStrategy = require('passport-google-oauth20').Strategy;
+
 var jwt = require('jsonwebtoken');
 var LocalStorage = require('node-localstorage').LocalStorage,
 localStorage = new LocalStorage('./scratch');
@@ -63,7 +65,7 @@ const transporter = nodemailer.createTransport({
 
 const main = (req, res) => {
 
-    rs(req, res);
+    //rs(req, res);
     res.render('index', {
         username: req.cookies.UserName
     });

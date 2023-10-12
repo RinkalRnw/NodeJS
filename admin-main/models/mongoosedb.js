@@ -26,7 +26,9 @@ const user = new mongoose.Schema({
     password: String,
     otp:Number,
     token: String,
-    role_id:{ type: mongoose.Schema.Types.ObjectId, ref: 'role' }
+    role_id:{ type: mongoose.Schema.Types.ObjectId, ref: 'role' },
+    google_id: String,
+    image:String
 
 }) 
 

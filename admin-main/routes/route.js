@@ -23,27 +23,20 @@ const {products,getSubData,saveproduct} = require('../controllers/products')
 const {roleData,saverole,checkRole,deleteRoleData,editRoleData,updaterole} = require('../controllers/role');
 
 /* Role Routes */
-// let role = JSON.parse(localStorage.getItem('userRole'));
-// console.log("Current Role is "+role)
-// if(role == "Admin"){
+
     routes.get('/role',checkRole,roleData);
     routes.post('/saverole',body,saverole)
     routes.get('/deleteRole/:id',checkRole,deleteRoleData);
     routes.get('/editRole/:id',checkRole,editRoleData);
     routes.post('/updateRole/:id',body,updaterole)
-    
-// } else {
-//     routes.get('/pagenotfound',(req,res)=>{
-//         res.render('pagenotfound')
-//     })
-// }
-
 
 routes.get('/admin',login);
 
-routes.get('/admin/home',main);
+
+
+routes.get('/admin/home',verifyToken,main);
 routes.get('/admin/form',formdata);
-routes.get('/admin/category',verifyToken,categoryData);
+routes.get('/admin/category',checkRole,categoryData);
 routes.post('/admin/savecategory',body,savecat)
 routes.post('/admin/savesubcategory',body,savesubcat)
 routes.post('/admin/saveproduct',body,saveproduct)
