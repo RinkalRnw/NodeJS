@@ -4,16 +4,25 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const cookie = require('cookie-parser');
 const dbConnect = require('./models/dbconfig')
+
+const passport = require('passport');
+// const cookieSession = require('cookie-session'); 
 dbConnect();
 app.use(cookie());
-
+// app.use(cookieSession({ 
+//     name: 'google-auth-session', 
+//     keys: ['key1', 'key2'] 
+// })); 
 app.use(session({
-
     secret: 'flashblog',
     saveUninitialized: true,
     resave: true
 
 }))
+app.use(passport.initialize()); 
+app.use(passport.session()); 
+
+
 
 app.use(flash());
 

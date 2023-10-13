@@ -5,6 +5,11 @@ const app = express();
 const bodyParser = require('body-parser');
 
 const body = bodyParser.urlencoded({ extended: true })
+
+
+const passport = require('passport');
+const cookieSession = require('cookie-session'); 
+require("../models/googleauthconfig")
 // const app = express();
 // const bodyParser = require('body-parser');
 // app.use(express.json());
@@ -32,9 +37,18 @@ const {roleData,saverole,checkRole,deleteRoleData,editRoleData,updaterole} = req
 
 routes.get('/admin',login);
 
+//Google routes
+routes.get('/auth/google',
 
+  passport.authenticate('google', { scope: ['profile','email'] }));
+ 
+routes.get('/auth/google/callback', 
+  passport.authenticate('google', { 
+        successRedirect:'/admin/home',
+        failureRedirect: '/admin'
+   }));
 
-routes.get('/admin/home',verifyToken,main);
+routes.get('/admin/home',main);
 routes.get('/admin/form',formdata);
 routes.get('/admin/category',checkRole,categoryData);
 routes.post('/admin/savecategory',body,savecat)

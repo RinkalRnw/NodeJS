@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const  findOrCreate = require('mongoose-findorcreate')
 const data = async () => {
 
     const url = 'mongodb://127.0.0.1:27017/adminpanel';
@@ -9,29 +9,31 @@ const data = async () => {
 
 data();
 
-const user = new mongoose.Schema({
+const User = new mongoose.Schema({
 
-    id: Number,
+    //id: Number,
     name: {
         type: String,
-         required: true,
+        //  required: true,
           unique: false
     },
     number: {
         type: String,
-         required: true,
-          unique: true
+        //  required: true,
+        //   unique: true
     },
     email: String,
     password: String,
     otp:Number,
     token: String,
     role_id:{ type: mongoose.Schema.Types.ObjectId, ref: 'role' },
-    google_id: String,
+    googleId: String,
     image:String
 
 }) 
 
-const model = new mongoose.model('users',user);
 
-module.exports = {model,user};
+User.plugin(findOrCreate)
+// const User = new mongoose.model('users',User);
+const model = new mongoose.model('users',User);
+module.exports = model;
