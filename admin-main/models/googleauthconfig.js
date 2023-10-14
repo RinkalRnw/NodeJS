@@ -14,12 +14,30 @@ passport.deserializeUser(function(user, done) {
 passport.use(new GoogleStrategy({
     clientID:"127792281349-6nn6l12m7tdbsv4a1no7bmgsrsv3jvmf.apps.googleusercontent.com",
     clientSecret:"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",
-    callbackURL: "http://localhost:5000/auth/google/callback"
+    callbackURL: "http://localhost:5000/auth/google/callback",
+    passReqToCallback: true
   },
-  function(accessToken, refreshToken, profile, cb) {
-    console.log(profile);
-    model.findOrCreate({ googleId: profile.id }, function (err, user) {
-      return cb(err, user);
+  function(request,accessToken, refreshToken, profile, cb) {
+    // console.log(profile);
+    model.findOrCreate({ googleId: profile.id }, function (err, user,created) {
+      
+      if(created) {
+        
+        user.created = true;
+        user.profile = profile;
+        // console.log("Created ",created);
+        return cb(err, user);
+      } else {
+        user.created = false;
+         console.log('Updated "%s"', user.googleId);
+          return cb(err, user);
+        
+      }
+      
+      // model.findOrCreate({googleId: profile.id}, function(err, user, created) {
+      //   // created will be false here
+      //   console.log('Updated "%s"', user.googleId);
+      // })
     });
   }
 ));
