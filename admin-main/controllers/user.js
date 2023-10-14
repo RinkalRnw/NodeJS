@@ -1,4 +1,4 @@
-const {model,user} = require('../models/mongoosedb');
+const model = require('../models/mongoosedb');
 // const sendinBlue = require('sib-api-v3-sdk');
 const express = require('express');
 const nodemailer = require('nodemailer')

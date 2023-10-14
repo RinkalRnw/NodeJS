@@ -97,6 +97,7 @@ const updaterole = async (req,res)=>{
 
 const checkRole = async (req, res,next)=>{
     let role = JSON.parse(localStorage.getItem('userRole'));
+    console.log(role);
     if(role=="Admin"){
         next();
     } else {
