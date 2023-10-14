@@ -6,10 +6,11 @@ const bodyParser = require('body-parser');
 
 const body = bodyParser.urlencoded({ extended: true })
 
-
+app.use(express.static(__dirname));
 const passport = require('passport');
 const cookieSession = require('cookie-session'); 
 require("../models/googleauthconfig")
+const rolemodel = require('../models/roleModel');
 // const app = express();
 // const bodyParser = require('body-parser');
 // app.use(express.json());
@@ -27,6 +28,7 @@ const {savesubcat,allSubCat,deleteSubCat,editSubCat,updatesubcat,getCatData,getF
 const {products,getSubData,saveproduct} = require('../controllers/products')
 const {roleData,saverole,checkRole,deleteRoleData,editRoleData,updaterole} = require('../controllers/role');
 
+const {loginDetails,savedata} = require('../controllers/googleController')
 /* Role Routes */
 
     routes.get('/role',checkRole,roleData);
@@ -38,15 +40,25 @@ const {roleData,saverole,checkRole,deleteRoleData,editRoleData,updaterole} = req
 routes.get('/admin',login);
 
 //Google routes
-routes.get('/auth/google',
-
-  passport.authenticate('google', { scope: ['profile','email'] }));
+routes.get('/auth/google',passport.authenticate('google', { scope: ['profile','email'] }));
  
 routes.get('/auth/google/callback', 
   passport.authenticate('google', { 
-        successRedirect:'/admin/home',
+        // successRedirect:'/admin/home',
         failureRedirect: '/admin'
-   }));
+   }),async (req,res)=>{
+    let roleData1 = await rolemodel.find({isActive:1})
+      console.log(req.user.profile)
+      if(req.user.created){
+          res.render('logindetails',{
+            user:req.user.profile,
+            roleData:roleData1,
+            message2:"You have been registered successfully."
+          });
+      } else {
+          res.redirect('/admin/home');
+      }
+   });
 
 routes.get('/admin/home',main);
 routes.get('/admin/form',formdata);
@@ -60,6 +72,11 @@ routes.get('/admin/products',products);
 routes.get('/admin/deleteSubCat/:id',deleteSubCat);
 routes.get('/admin/editSubCat/:id',editSubCat);
 routes.post('/admin/updatesubcategory/:id',body,updatesubcat)
+
+
+routes.get('/admin/details',loginDetails);
+routes.post('/admin/details',body,savedata);
+
 
 
 routes.post('/admin/updatecategory/:id',body,updatecat)
