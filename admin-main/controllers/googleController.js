@@ -13,11 +13,10 @@ const savedata = async (req, res) => {
     console.log(req.body)
 
     const checkuserrole = await model.findOne({ role_id }).populate('role_id');
+    
     let roleData = await rolemodel.find({ isActive: 1 });
-    let rolename = checkuserrole.role_id.rolename;
-    console.log(rolename);
-    localStorage.setItem('userRole', JSON.stringify(rolename));
-    if (email && name && number) {
+   
+    if (email && name && number && role_id) {
         if (checkuserrole) {
             if (checkuserrole.role_id.rolename == 'Admin') {
                 req.flash('info', 'Admin is already registered!');
@@ -28,6 +27,7 @@ const savedata = async (req, res) => {
                     req.flash('info', 'Two Managers already registered!');
                     res.render('signup', { message2: req.flash('info'), roleData: roleData });
                 } else {
+                    email = { $regex: new RegExp(email, "i") }
                     let data = await model.findOneAndUpdate({ googleId }, {
                         $set: {
                             name: name,
@@ -56,12 +56,13 @@ const savedata = async (req, res) => {
 
                     // await transporter.sendMail(mailInfo)
 
-                    // await data.save();
                     //JWT token generate
-                    // var token = jwt.sign({data:data},secretKey);
-                    // let _id = data._id;
-                    // const result = await model.findByIdAndUpdate({_id},{$set:{token:token}})
-
+                    var token = jwt.sign({data:data},secretKey);
+                    let _id = data._id;
+                    const result = await model.findByIdAndUpdate({_id},{$set:{token:token}})
+                    let rolename = checkuserrole.role_id.rolename;
+                    console.log(rolename);
+                    localStorage.setItem('userRole', JSON.stringify(rolename));
 
                     res.redirect('/admin/home');
                 }
@@ -72,7 +73,6 @@ const savedata = async (req, res) => {
                 res.render('signup', { message2: req.flash('info'), roleData: roleData });
             }
         }
-
         else {
             let data = await model.findOneAndUpdate({ googleId }, {
                 $set: {
