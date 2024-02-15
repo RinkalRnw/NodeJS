@@ -18,7 +18,7 @@ async function main() {
 
     try {
         await client.connect();
-    
+        console.log("Added code - 15-02-24");
         console.log("Connect to db")
         const db = client.db("bookstore");
         const collection = db.collection("bookstore");
